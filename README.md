@@ -9,3 +9,5 @@ We will branch off and create our own inputs to the model, they will at first be
 
 My plan is to have fun with this and perhaps use short 15frame anime clips. Perhaps during powerup or fighting scenes. We will see what the model predicts will happen next:)
 
+The model will likely need to be changed for larger and more complex inputs, perhaps more/different layers. As we go along we will experiment.
+
