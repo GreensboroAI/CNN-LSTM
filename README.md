@@ -7,7 +7,7 @@ We will utilise the basic Keras Conv_LSTM example and build it. This example cre
 # Heading to
 We will branch off and create our own inputs to the model, they will at first be images resized to 40x40 and be 15frames long for each animation. This should make running them through the model relatively easy. Over time we will resize them to be larger as the assumption would be the cnn can get better information from larger images and hopefully make better guesses for the next frame. 
 
-My plan is to have fun with this and perhaps use short 15frame anime clips. Perhaps during powerup or fighting scenes. We will see what the model predicts will happen next:)
+My plan is to have fun with this and perhaps use short 15 frame anime clips. Perhaps during powerup or fighting scenes. We will see what the model predicts will happen next in the fights:)
 
 The model will likely need to be changed for larger and more complex inputs, perhaps more/different layers. As we go along we will experiment.
 
