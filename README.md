@@ -23,5 +23,5 @@ Getting further along with this project. As I have been trying to add more and m
 
 Below is a GIF of projected animation from learning on a small number of examples. 
 
-![demo](walking.gif)
+![demo](walking2.gif)
 
