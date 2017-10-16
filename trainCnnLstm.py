@@ -2,7 +2,7 @@ from keras.models import Sequential
 from keras.layers.convolutional import Conv3D
 from keras.layers.convolutional_recurrent import ConvLSTM2D
 from keras.layers.normalization import BatchNormalization
-from keras.preprocessing.image import img_to_array
+from keras.preprocessing.image import img_to_array, array_to_img
 from keras.preprocessing.image import load_img
 import numpy as np
 import pylab as plt
@@ -12,20 +12,24 @@ import pylab as plt
 # of identical shape.
 
 seq = Sequential()
-seq.add(ConvLSTM2D(filters=40, kernel_size=(3,3),
+seq.add(ConvLSTM2D(filters=40, kernel_size=(1,1),
                    input_shape=(None, 80, 80, 3), #Will need to change channels to 3 for real images
-                   padding='same', return_sequences=True))
+                   padding='same', return_sequences=True,
+                   activation='relu'))
 seq.add(BatchNormalization())
-seq.add(ConvLSTM2D(filters=40, kernel_size=(3,3),
-                   padding='same', return_sequences=True))
+seq.add(ConvLSTM2D(filters=40, kernel_size=(1,1),
+                   padding='same', return_sequences=True,
+                   activation='relu'))
 seq.add(BatchNormalization())
-seq.add(ConvLSTM2D(filters=40, kernel_size=(3,3),
-                   padding='same', return_sequences=True))
+seq.add(ConvLSTM2D(filters=40, kernel_size=(1,1),
+                   padding='same', return_sequences=True,
+                   activation='relu'))
 seq.add(BatchNormalization())
-seq.add(ConvLSTM2D(filters=40, kernel_size=(3,3),
-                   padding='same', return_sequences=True))
+seq.add(ConvLSTM2D(filters=40, kernel_size=(1,1),
+                   padding='same', return_sequences=True,
+                   activation='relu'))
 seq.add(BatchNormalization())
-seq.add(Conv3D(filters=3, kernel_size=(3,3,3),
+seq.add(Conv3D(filters=3, kernel_size=(1,1,1),
                activation='sigmoid',
                padding='same', data_format='channels_last'))
 seq.compile(loss='binary_crossentropy', optimizer='adadelta')
@@ -130,7 +134,7 @@ def generate_movies(n_samples=1200, n_frames=15):
 #--------------------------------------------------------------------------------------------------#
 
 import os
-rootdir = 'C:\\Users\\DanJas\\Desktop\\CNNLSTM' ###Change this to the root directory of the project on your computer
+rootdir = 'C:\\Users\\DanJas\\Desktop\\CNNLSTM'
 
 movies_input = []
 movies_input_shifted = []
@@ -144,6 +148,7 @@ for subdir, dirs, files in os.walk(rootdir):
                 img_path = str(rootdir) + '\\' + str(dir) + '\\' + str(files[2][i])
                 img = load_img(img_path, target_size=(80,80))
                 x = img_to_array(img)
+                x = x // 255
                 movies_input_delayed.append(x)
         movies_input.append(movies_input_delayed[:-1])
         movies_input_shifted.append(movies_input_delayed[1:])
@@ -167,16 +172,16 @@ print(np.array(movies_input_shifted).shape[4])
 #        epochs=10, validation_split=0.05)
 ### Now with own images is
 seq.fit(np.array(movies_input), np.array(movies_input_shifted), batch_size=1,
-        epochs=10)
+        epochs=50)
 
 
 # Testing the network on one movie
 # feed it with the first 7 positions and then
 # predict the new positions
 which = 0
-track = np.array(movies_input)[which][:7, ::, ::, ::]
+track = np.array(movies_input)[which][:15, ::, ::, ::]
 
-for j in range(16):
+for j in range(30):
     new_pos = seq.predict(track[np.newaxis, ::, ::, ::, ::])
     new = new_pos[::, -1, ::, ::, ::]
     track = np.concatenate((track, new), axis=0)
@@ -184,19 +189,19 @@ for j in range(16):
 # And then compare the predictions
 # to the ground truth
 track2 = np.array(movies_input)[which][::, ::, ::, ::]
-for i in range(15):
+for i in range(29):
     fig = plt.figure(figsize=(10, 5))
 
     ax = fig.add_subplot(121)
 
-    if i >= 7:
+    if i >= 15:
         ax.text(1, 3, 'Predictions !', fontsize=20, color='w')
     else:
         ax.text(1, 3, 'Initial trajectory', fontsize=20)
 
     toplot = track[i, ::, ::, 0]
 
-    plt.imshow(toplot)
+    plt.imshow(toplot * 255)
     ax = fig.add_subplot(122)
     plt.text(1, 3, 'Ground truth', fontsize=20)
 
