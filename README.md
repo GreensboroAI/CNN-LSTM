@@ -14,5 +14,7 @@ The model will likely need to be changed for larger and more complex inputs, per
 # Input creation
 Explore the best way to change short clips of movies in to image frames. Create a function that clips movies to a certain number of frames. From quick reading on the subject as long as movement of the subject is not too fast we can prob get away with 12-15 frames per second. So for a 10 second clip it would only require 120-150 frames be extracted.
 
+If we create a function that looks for movie in each subfolder and then extracts the images to that subfolder. We can then use our current function that creates tensors from images.
+
 
 
