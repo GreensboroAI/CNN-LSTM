@@ -130,7 +130,7 @@ def generate_movies(n_samples=1200, n_frames=15):
 #--------------------------------------------------------------------------------------------------#
 
 import os
-rootdir = 'C:\\Users\\DanJas\\Desktop\\CNNLSTM'
+rootdir = 'C:\\Users\\DanJas\\Desktop\\CNNLSTM' ###Change this to the root directory of the project on your computer
 
 movies_input = []
 movies_input_shifted = []
