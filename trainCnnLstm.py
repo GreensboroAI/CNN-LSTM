@@ -13,7 +13,11 @@ import pylab as plt
 
 seq = Sequential()
 seq.add(ConvLSTM2D(filters=40, kernel_size=(1,1),
-                   input_shape=(None, 80, 80, 3), #Will need to change channels to 3 for real images
+                   input_shape=(None, 40, 40, 3), #Will need to change channels to 3 for real images
+                   padding='same', return_sequences=True,
+                   activation='relu'))
+seq.add(BatchNormalization())
+seq.add(ConvLSTM2D(filters=40, kernel_size=(2,2),
                    padding='same', return_sequences=True,
                    activation='relu'))
 seq.add(BatchNormalization())
@@ -21,11 +25,7 @@ seq.add(ConvLSTM2D(filters=40, kernel_size=(1,1),
                    padding='same', return_sequences=True,
                    activation='relu'))
 seq.add(BatchNormalization())
-seq.add(ConvLSTM2D(filters=40, kernel_size=(1,1),
-                   padding='same', return_sequences=True,
-                   activation='relu'))
-seq.add(BatchNormalization())
-seq.add(ConvLSTM2D(filters=40, kernel_size=(1,1),
+seq.add(ConvLSTM2D(filters=40, kernel_size=(2,2),
                    padding='same', return_sequences=True,
                    activation='relu'))
 seq.add(BatchNormalization())
@@ -146,7 +146,7 @@ for subdir, dirs, files in os.walk(rootdir):
         for files in os.walk(dir):
             for i in range(len(files[2])):
                 img_path = str(rootdir) + '\\' + str(dir) + '\\' + str(files[2][i])
-                img = load_img(img_path, target_size=(80,80))
+                img = load_img(img_path, target_size=(40,40))
                 x = img_to_array(img)
                 x = x // 255
                 movies_input_delayed.append(x)
@@ -172,13 +172,13 @@ print(np.array(movies_input_shifted).shape[4])
 #        epochs=10, validation_split=0.05)
 ### Now with own images is
 seq.fit(np.array(movies_input), np.array(movies_input_shifted), batch_size=1,
-        epochs=50)
+        epochs=100)
 
 
 # Testing the network on one movie
 # feed it with the first 7 positions and then
 # predict the new positions
-which = 0
+which = 6
 track = np.array(movies_input)[which][:15, ::, ::, ::]
 
 for j in range(30):
@@ -201,7 +201,7 @@ for i in range(29):
 
     toplot = track[i, ::, ::, 0]
 
-    plt.imshow(toplot * 255)
+    plt.imshow(toplot)
     ax = fig.add_subplot(122)
     plt.text(1, 3, 'Ground truth', fontsize=20)
 
