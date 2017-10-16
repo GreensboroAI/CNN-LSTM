@@ -18,5 +18,8 @@ If we create a function that looks for a movie in each subfolder and then create
 
 We could potentially create a single function that takes a movie and converts it all the way to a list of tensors that we can use, perhaps in the long run examine this option.
 
+# Update 10/16/2017
+Getting further along with this project. As I have been trying to add more and more animations to train on I am running into OOM errors. I may need to try and create an image generator and flow_from_directory for this project to overcome this. Will look in to this soon.
+
 
 
