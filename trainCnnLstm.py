@@ -141,7 +141,7 @@ for subdir, dirs, files in os.walk(rootdir):
         movies_input_shifted_delayed = []
         for files in os.walk(dir):
             for i in range(len(files[2])):
-                img_path = 'C:\\Users\\DanJas\\Desktop\\CNNLSTM\\' + str(dir) + '\\' + str(files[2][i])
+                img_path = str(rootdir) + '\\' + str(dir) + '\\' + str(files[2][i])
                 img = load_img(img_path, target_size=(80,80))
                 x = img_to_array(img)
                 movies_input_delayed.append(x)
