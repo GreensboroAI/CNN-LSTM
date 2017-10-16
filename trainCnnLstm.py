@@ -13,7 +13,7 @@ import pylab as plt
 
 seq = Sequential()
 seq.add(ConvLSTM2D(filters=40, kernel_size=(3,3),
-                   input_shape=(None, 40, 40, 3), #Will need to change channels to 3 for real images
+                   input_shape=(None, 80, 80, 3), #Will need to change channels to 3 for real images
                    padding='same', return_sequences=True))
 seq.add(BatchNormalization())
 seq.add(ConvLSTM2D(filters=40, kernel_size=(3,3),
@@ -142,7 +142,7 @@ for subdir, dirs, files in os.walk(rootdir):
         for files in os.walk(dir):
             for i in range(len(files[2])):
                 img_path = 'C:\\Users\\DanJas\\Desktop\\CNNLSTM\\' + str(dir) + '\\' + str(files[2][i])
-                img = load_img(img_path, target_size=(40,40))
+                img = load_img(img_path, target_size=(80,80))
                 x = img_to_array(img)
                 movies_input_delayed.append(x)
         movies_input.append(movies_input_delayed[:-1])
@@ -173,8 +173,8 @@ seq.fit(np.array(movies_input), np.array(movies_input_shifted), batch_size=1,
 # Testing the network on one movie
 # feed it with the first 7 positions and then
 # predict the new positions
-which = 90
-track = noisy_movies[which][:7, ::, ::, ::]
+which = 0
+track = np.array(movies_input)[which][:7, ::, ::, ::]
 
 for j in range(16):
     new_pos = seq.predict(track[np.newaxis, ::, ::, ::, ::])
@@ -183,7 +183,7 @@ for j in range(16):
 
 # And then compare the predictions
 # to the ground truth
-track2 = noisy_movies[which][::, ::, ::, ::]
+track2 = np.array(movies_input)[which][::, ::, ::, ::]
 for i in range(15):
     fig = plt.figure(figsize=(10, 5))
 
@@ -202,7 +202,7 @@ for i in range(15):
 
     toplot = track2[i, ::, ::, 0]
     if i >= 2:
-        toplot = shifted_movies[which][i - 1, ::, ::, 0]
+        toplot = np.array(movies_input_shifted)[which][i - 1, ::, ::, 0]
 
     plt.imshow(toplot)
     plt.savefig('%i_animate.png' % (i + 1))
