@@ -21,5 +21,7 @@ We could potentially create a single function that takes a movie and converts it
 # Update 10/16/2017
 Getting further along with this project. As I have been trying to add more and more animations to train on I am running into OOM errors. I may need to try and create an image generator and flow_from_directory for this project to overcome this. Will look in to this soon.
 
+Below is a GIF of projected animation from learning on a small number of examples. 
+
 ![demo](walking.gif)
 
